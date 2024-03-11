@@ -10,15 +10,16 @@ install:
 	@npm install -D tailwindcss
 	@npm install -D daisyui@latest
 
-css:
-	tailwindcss -i view/css/app.css -o public/styles.css
-templ:
-	@templ generate --watch --proxy=http://localhost:3000
+# css:
+# templ:
+# 	@templ generate --watch --proxy=http://localhost:3000
+
 
 build:
+	npx tailwindcss -i view/css/app.css -o public/styles.css
 	@templ generate view
-	@go build -tags dev -o bin/ufantasyai main.go
-
+# @go build -tags dev -o bin/ufantasyai main.go
+	@go build -o bin/ufantasyai main.go
 up: ## Database migration up
 	@go run cmd/migrate/main.go up
 

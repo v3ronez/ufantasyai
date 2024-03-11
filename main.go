@@ -22,7 +22,8 @@ func main() {
 	}
 	router := chi.NewMux()
 
-	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS)))) //render static files
+	// router.Handle("/*", http.StripPrefix("/public/", http.FileServer(http.FS(FS)))) //render static files
+	router.Handle("/*", http.StripPrefix("/public/", http.FileServerFS(os.DirFS("public")))) //render static files
 	router.Get("/", handler.MakeHandler(home.HandlerHomeIndex))
 
 	port := os.Getenv("HTTP_PORT")
