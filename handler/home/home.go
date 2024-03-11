@@ -1,4 +1,4 @@
-package handler
+package home
 
 import (
 	"net/http"
@@ -6,6 +6,6 @@ import (
 	"github.com/v3ronez/ufantasyai/view/home"
 )
 
-func HandlerHomeIndex(w http.ResponseWriter, r *http.Request) { //is like a controller in laravel
-	home.Index().Render(r.Context(), w)
+func HandlerHomeIndex(w http.ResponseWriter, r *http.Request) error { //is like a controller in laravel
+	return home.Index().Render(r.Context(), w) //render view/home
 }

@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
-	handler "github.com/v3ronez/ufantasyai/handler/home"
+	"github.com/v3ronez/ufantasyai/handler"
+	"github.com/v3ronez/ufantasyai/handler/home"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 	router := chi.NewMux()
-	router.Get("/", handler.HandlerHomeIndex)
+	router.Get("/", handler.MakeHandler(home.HandlerHomeIndex))
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)
 	log.Fatal(http.ListenAndServe(port, router))
