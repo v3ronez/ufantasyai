@@ -1,7 +1,11 @@
 package home
 
+import "github.com/v3ronez/ufantasyai/view/layout"
+
 templ Index() {
-<div>
-   Hello home 
-</div>
+	@layout.App(true) {
+		<div>
+			Hello home 
+		</div>
+	}
 }
