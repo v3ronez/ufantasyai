@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	"github.com/v3ronez/ufantasyai/handler"
+	"github.com/v3ronez/ufantasyai/handler/auth"
 	"github.com/v3ronez/ufantasyai/handler/home"
 )
 
@@ -22,9 +23,10 @@ func main() {
 	}
 	router := chi.NewMux()
 
+	router.Use(auth.WithUser)
 	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS)))) //render static files
 	// router.Handle("/*", http.StripPrefix("/public/", http.FileServerFS(os.DirFS("public")))) //render static files
-	router.Get("/", handler.MakeHandler(home.HandlerHomeIndex))
+	router.Get("/", handler.Make(home.HandlerHomeIndex))
 
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)
