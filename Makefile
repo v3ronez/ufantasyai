@@ -18,8 +18,8 @@ install:
 build:
 	npx tailwindcss -i view/css/app.css -o public/styles.css
 	@templ generate view
-# @go build -tags dev -o bin/ufantasyai main.go
 	@go build -o bin/ufantasyai main.go
+# @go build -tags dev -o bin/ufantasyai main.go
 up: ## Database migration up
 	@go run cmd/migrate/main.go up
 
