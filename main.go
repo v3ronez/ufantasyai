@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"log"
 	"log/slog"
 	"net/http"
@@ -12,12 +13,18 @@ import (
 	"github.com/v3ronez/ufantasyai/handler/home"
 )
 
+// go:embed pulic
+var FS embed.FS
+
 func main() {
 	if err := initApp(); err != nil {
 		log.Fatal(err)
 	}
 	router := chi.NewMux()
+
+	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS)))) //render static files
 	router.Get("/", handler.MakeHandler(home.HandlerHomeIndex))
+
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)
 	log.Fatal(http.ListenAndServe(port, router))
