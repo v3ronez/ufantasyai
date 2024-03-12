@@ -7,5 +7,5 @@ import (
 )
 
 func HandlerHomeIndex(w http.ResponseWriter, r *http.Request) error { //is like a controller in laravel
-	return home.Index().Render(r.Context(), w) //render view/home
+	return home.Index().Render(r.Context(), w) //render view/home func index()
 }
