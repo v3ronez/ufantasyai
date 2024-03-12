@@ -1,0 +1,37 @@
+package auth
+
+import "github.com/v3ronez/ufantasyai/view/layout"
+import "os"
+
+templ Login() {
+	@layout.App(false) {
+		<div class="flex justify-center h-screen">
+			<div class="max-w-screen-sm w-full bg-base-300 p-8 rounded-xl m-auto">
+				<h1 class="text-center text-xl font-black">Login to { os.Getenv("APP_NAME") }</h1>
+				<div class="w-full">
+					<label class="form-control w-full">
+						<div class="label">
+							<span class="label-text">Email</span>
+						</div>
+						<input type="text" placeholder="Email" class="input input-bordered w-full"/>
+						<div class="label">
+							<span class="label-text-alt text-error">error message</span>
+						</div>
+					</label>
+				</div>
+				<div class="w-full">
+					<label class="form-control w-full">
+						<div class="label">
+							<span class="label-text">Password</span>
+						</div>
+						<input type="password" placeholder="Password" class="input input-bordered w-full"/>
+						<div class="label">
+							<span class="label-text-alt text-error">error message</span>
+						</div>
+					</label>
+				</div>
+				<button type="button" class="btn btn-primary w-full">Login <i class="fa-solid fa-arrow-right"></i></button>
+			</div>
+		</div>
+	}
+}
