@@ -29,6 +29,9 @@ func main() {
 	// router.Handle("/*", http.StripPrefix("/public/", http.FileServerFS(os.DirFS("public")))) //render static files
 	router.Get("/", handler.Make(home.HandlerHomeIndex))
 	router.Get("/login", handler.Make(auth.HandleLoginIndex))
+	router.Get("/signup", handler.Make(auth.HandleSingUpIndex))
+	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
+	router.Post("/login", handler.Make(auth.HandleLoginUser))
 
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)

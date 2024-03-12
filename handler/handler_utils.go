@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/a-h/templ"
 	"github.com/v3ronez/ufantasyai/types"
 )
 
@@ -21,4 +22,8 @@ func Make(handler func(http.ResponseWriter, *http.Request) error) http.HandlerFu
 			slog.Error("Internal server error", "error:", err, "path", r.URL.Path)
 		}
 	}
+}
+
+func RenderComponent(w http.ResponseWriter, r *http.Request, c templ.Component) error {
+	return c.Render(r.Context(), w)
 }

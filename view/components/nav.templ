@@ -8,7 +8,7 @@ templ Nav() {
 		<div class="flex-1">
 			<a class="text-2xl font-black text-accent">{ os.Getenv("APP_NAME") }</a>
 		</div>
-		<div class="flex-none">
+		<div class="flex-none ">
 			<ul class="menu menu-horizontal px-1">
 				if view.AuthenticatedUser(ctx).LoggedIn {
 					<li>
@@ -23,7 +23,8 @@ templ Nav() {
 						</details>
 					</li>
 				} else {
-					<a href="" class="btn btn-primary">Login</a>
+					<a href="/login" class="btn btn-primary m-2">Login</a>
+					<a href="/signup" class="btn btn-accent m-2">Sign Up</a>
 				}
 			</ul>
 		</div>

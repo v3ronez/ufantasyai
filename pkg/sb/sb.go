@@ -9,6 +9,6 @@ import (
 var Client *supabase.Client
 
 func InitSB() error {
-	Client = supabase.CreateClient(os.Getenv("SUPABASE_URL"), os.Getenv("SUPABASE_SECRET"))
+	Client = supabase.CreateClient(os.Getenv("SUPABASE_URL"), os.Getenv("SUPABASE_KEY"))
 	return nil
 }

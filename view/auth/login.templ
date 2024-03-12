@@ -2,36 +2,127 @@ package auth
 
 import "github.com/v3ronez/ufantasyai/view/layout"
 import "os"
+import "github.com/nedpals/supabase-go"
+
+type LoginErrors struct {
+	Email              string
+	Password           string
+	InvalidCredentials string
+}
+type SignUpErrors struct {
+	Email              string
+	Password           string
+	RepeatPassword     string
+	InvalidCredentials string
+}
 
 templ Login() {
 	@layout.App(false) {
 		<div class="flex justify-center h-screen">
-			<div class="max-w-screen-sm w-full bg-base-300 p-8 rounded-xl m-auto">
+			<div class="max-w-md w-full bg-base-300 py-12 p-8 rounded-xl m-auto">
 				<h1 class="text-center text-xl font-black">Login to { os.Getenv("APP_NAME") }</h1>
-				<div class="w-full">
-					<label class="form-control w-full">
-						<div class="label">
-							<span class="label-text">Email</span>
-						</div>
-						<input type="text" placeholder="Email" class="input input-bordered w-full"/>
-						<div class="label">
-							<span class="label-text-alt text-error">error message</span>
-						</div>
-					</label>
-				</div>
-				<div class="w-full">
-					<label class="form-control w-full">
-						<div class="label">
-							<span class="label-text">Password</span>
-						</div>
-						<input type="password" placeholder="Password" class="input input-bordered w-full"/>
-						<div class="label">
-							<span class="label-text-alt text-error">error message</span>
-						</div>
-					</label>
-				</div>
-				<button type="button" class="btn btn-primary w-full">Login <i class="fa-solid fa-arrow-right"></i></button>
+				@LoginForm(supabase.UserCredentials{}, LoginErrors{})
 			</div>
 		</div>
 	}
+}
+
+templ LoginForm(creds supabase.UserCredentials, err LoginErrors) {
+	<form
+		hx-post="/login"
+		hx-swap="outerHTML"
+	>
+		<div class="w-full mb-5">
+			<label class="form-control w-full">
+				<div class="label">
+					<span class="label-text">Email</span>
+				</div>
+				<input type="text" name="email" value={ creds.Email } placeholder="Email" class="input input-bordered w-full"/>
+				if len(err.Email) > 0 {
+					<div class="label">
+						<span class="label-text-alt text-error">{ err.Email }</span>
+					</div>
+				}
+			</label>
+		</div>
+		<div class="w-full mb-5">
+			<label class="form-control w-full">
+				<div class="label">
+					<span class="label-text">Password</span>
+				</div>
+				<input type="password" name="password" placeholder="Password" class="input input-bordered w-full"/>
+				if len(err.Password) > 0 {
+					<div class="label">
+						<span class="label-text-alt text-error">{ err.Password }</span>
+					</div>
+				}
+			</label>
+		</div>
+		if len(err.InvalidCredentials) > 0 {
+			<div class="text-sm text-center text-error mb-5">{ err.InvalidCredentials }</div>
+		}
+		<button type="submit" class="btn btn-primary w-full">Login <i class="fa-solid fa-arrow-right"></i></button>
+	</form>
+}
+
+templ SignUp() {
+	@layout.App(false) {
+		<div class="flex justify-center h-screen">
+			<div class="max-w-md w-full bg-base-300 py-12 p-8 rounded-xl m-auto">
+				<h1 class="text-center text-xl font-black">SignUp to { os.Getenv("APP_NAME") }</h1>
+				@SignUpForm(supabase.UserCredentials{}, SignUpErrors{})
+			</div>
+		</div>
+	}
+}
+
+templ SignUpForm(creds supabase.UserCredentials, err SignUpErrors) {
+	<form
+		hx-post="/signup"
+		hx-swap="outerHTML"
+	>
+		<div class="w-full mb-5">
+			<label class="form-control w-full">
+				<div class="label">
+					<span class="label-text">Email</span>
+				</div>
+				<input type="text" name="email" value={ creds.Email } placeholder="Email" class="input input-bordered w-full"/>
+				if len(err.Email) > 0 {
+					<div class="label">
+						<span class="label-text-alt text-error">{ err.Email }</span>
+					</div>
+				}
+			</label>
+		</div>
+		<div class="w-full mb-5">
+			<label class="form-control w-full">
+				<div class="label">
+					<span class="label-text">Password</span>
+				</div>
+				<input type="password" name="password" placeholder="Password" class="input input-bordered w-full"/>
+				if len(err.Password) > 0 {
+					<div class="label">
+						<span class="label-text-alt text-error">{ err.Password }</span>
+					</div>
+				}
+			</label>
+		</div>
+		<div class="w-full mb-5">
+			<label class="form-control w-full">
+				<div class="label">
+					<span class="label-text">Repeat Password</span>
+				</div>
+				<input type="password" name="repeat_password" placeholder="Password" class="input input-bordered w-full"/>
+				if len(err.Password) > 0 {
+					<div class="label">
+						<span class="label-text-alt text-error">{ err.RepeatPassword }</span>
+					</div>
+				}
+			</label>
+		</div>
+		if len(err.InvalidCredentials) > 0 {
+			<div class="text-sm text-center text-error mb-5">{ err.InvalidCredentials }</div>
+		}
+		<button type="submit" class="btn btn-primary w-full">Create account <i class="fa-solid fa-arrow-right"></i></button>
+	</form>
 }
