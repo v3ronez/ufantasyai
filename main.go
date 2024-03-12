@@ -12,6 +12,7 @@ import (
 	"github.com/v3ronez/ufantasyai/handler"
 	"github.com/v3ronez/ufantasyai/handler/auth"
 	"github.com/v3ronez/ufantasyai/handler/home"
+	"github.com/v3ronez/ufantasyai/pkg/sb"
 )
 
 //go:embed public
@@ -35,8 +36,8 @@ func main() {
 }
 
 func initApp() error {
-	// if err := godotenv.Load(); err != nil {
-	// return
-	// }
-	return godotenv.Load()
+	if err := godotenv.Load(); err != nil {
+		return err
+	}
+	return sb.InitSB()
 }
