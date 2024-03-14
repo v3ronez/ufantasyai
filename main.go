@@ -36,6 +36,8 @@ func main() {
 	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
 	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
 
+	router.Post("/logout", handler.Make(auth.HandlerLogout))
+
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)
 	log.Fatal(http.ListenAndServe(port, router))

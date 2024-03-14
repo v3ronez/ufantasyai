@@ -26,6 +26,7 @@ func WithUser(next http.Handler) http.Handler {
 	}
 	return http.HandlerFunc(fn)
 }
+
 func userIsLogged(r *http.Request) (types.AuthenticateUser, error) {
 	c, err := r.Cookie("access_token")
 	if err != nil {

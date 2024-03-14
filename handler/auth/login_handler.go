@@ -81,3 +81,13 @@ func setAuthCokkie(w http.ResponseWriter, cokkie *http.Cookie) {
 	}
 	http.SetCookie(w, cokkie)
 }
+
+func HandlerLogout(w http.ResponseWriter, r *http.Request) error {
+	setAuthCokkie(w, &http.Cookie{
+		Name:   "access_token",
+		Value:  "",
+		MaxAge: -1,
+	})
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	return nil
+}
