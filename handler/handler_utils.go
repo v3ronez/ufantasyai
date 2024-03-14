@@ -27,3 +27,9 @@ func Make(handler func(http.ResponseWriter, *http.Request) error) http.HandlerFu
 func RenderComponent(w http.ResponseWriter, r *http.Request, c templ.Component) error {
 	return c.Render(r.Context(), w)
 }
+
+func HtmxRedirect(w http.ResponseWriter, r *http.Request, url string) error {
+	w.Header().Set("HX-Redirect", url)
+	w.WriteHeader(http.StatusSeeOther)
+	return nil
+}

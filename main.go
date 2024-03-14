@@ -31,12 +31,11 @@ func main() {
 
 	router.Get("/login", handler.Make(auth.HandleLoginIndex))
 	router.Post("/login", handler.Make(auth.HandleLoginCreate))
+	router.Post("/logout", handler.Make(auth.HandlerLogout))
 
 	router.Get("/signup", handler.Make(auth.HandleSingUpIndex))
 	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
 	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
-
-	router.Post("/logout", handler.Make(auth.HandlerLogout))
 
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)

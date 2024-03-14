@@ -28,7 +28,8 @@ func HandleLoginCreate(w http.ResponseWriter, r *http.Request) error {
 				auth.LoginErrors{InvalidCredentials: "The credentials you have entered are invalid"}))
 	}
 	setAuthCokkie(w, &http.Cookie{Name: "access_token", Value: res.AccessToken})
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	// http.Redirect(w, r, "/", http.StatusSeeOther)
+	handler.HtmxRedirect(w, r, "/")
 	return nil
 }
 
