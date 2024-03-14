@@ -17,7 +17,9 @@ templ App(nav bool) {
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
 		</head>
 		<body class="antialiased">
+		if nav {
 			@components.Nav()
+		}
 			{ children... } //anothers templ components
 		</body>
 	</html>

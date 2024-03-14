@@ -14,17 +14,11 @@ func HandleLoginIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.Login().Render(r.Context(), w)
 }
 
-func HandleLoginUser(w http.ResponseWriter, r *http.Request) error {
+func HandleLoginCreate(w http.ResponseWriter, r *http.Request) error {
 	credentials := supabase.UserCredentials{
 		Email:    r.FormValue("email"),
 		Password: r.FormValue("password"),
 	}
-	// if !util.IsValidEmail(credentials.Email) {
-	// 	return handler.RenderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{Email: "Email invalid"}))
-	// }
-	// if p, ok := util.ValidatePassword(credentials.Password); !ok {
-	// 	return handler.RenderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{Password: p}))
-	// }
 	res, err := sb.Client.Auth.SignIn(r.Context(), credentials)
 	if err != nil {
 		slog.Error("error", err)
@@ -40,9 +34,8 @@ func HandleLoginUser(w http.ResponseWriter, r *http.Request) error {
 		HttpOnly: true,
 	}
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/", http.StatusOK)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return nil
-	// return handler.RenderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{}))
 }
 
 // sing up
@@ -55,10 +48,19 @@ func HandleSingUpCreate(w http.ResponseWriter, r *http.Request) error {
 		Email:    r.FormValue("email"),
 		Password: r.FormValue("password"),
 	}
-	_, err := sb.Client.Auth.SignUp(r.Context(), credentials)
+	//validade fields
+
+	// if !util.IsValidEmail(credentials.Email) {
+	// 	return handler.RenderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{Email: "Email invalid"}))
+	// }
+	// if p, ok := util.ValidatePassword(credentials.Password); !ok {
+	// 	return handler.RenderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{Password: p}))
+	// }
+
+	user, err := sb.Client.Auth.SignUp(r.Context(), credentials)
 	if err != nil {
 		slog.Error("Error to create a new user: ", err)
+		return nil
 	}
-
-	return nil
+	return handler.RenderComponent(w, r, auth.SignUpSuccess(user.Email))
 }

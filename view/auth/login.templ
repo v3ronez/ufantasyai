@@ -12,8 +12,13 @@ type LoginErrors struct {
 type SignUpErrors struct {
 	Email              string
 	Password           string
-	RepeatPassword     string
+	ConfirmPassword    string
 	InvalidCredentials string
+}
+type SignUpParam struct {
+	Email           string
+	Password        string
+	ConfirmPassword string
 }
 
 templ Login() {
@@ -112,10 +117,10 @@ templ SignUpForm(creds supabase.UserCredentials, err SignUpErrors) {
 				<div class="label">
 					<span class="label-text">Repeat Password</span>
 				</div>
-				<input type="password" name="repeat_password" placeholder="Password" class="input input-bordered w-full"/>
+				<input type="password" name="confirm_password" placeholder="Password" class="input input-bordered w-full"/>
 				if len(err.Password) > 0 {
 					<div class="label">
-						<span class="label-text-alt text-error">{ err.RepeatPassword }</span>
+						<span class="label-text-alt text-error">{ err.ConfirmPassword }</span>
 					</div>
 				}
 			</label>
@@ -125,4 +130,8 @@ templ SignUpForm(creds supabase.UserCredentials, err SignUpErrors) {
 		}
 		<button type="submit" class="btn btn-primary w-full">Create account <i class="fa-solid fa-arrow-right"></i></button>
 	</form>
+}
+
+templ SignUpSuccess(email string) {
+	<div>You sign up successfully whith the email: <span class="font-semibold text-success">{ email }</span></div>
 }
