@@ -29,7 +29,11 @@ func RenderComponent(w http.ResponseWriter, r *http.Request, c templ.Component) 
 }
 
 func HtmxRedirect(w http.ResponseWriter, r *http.Request, url string) error {
-	w.Header().Set("HX-Redirect", url)
-	w.WriteHeader(http.StatusSeeOther)
+	if len(w.Header().Get("HX-Request")) > 0 {
+		w.Header().Set("HX-Redirect", url)
+		w.WriteHeader(http.StatusSeeOther)
+		return nil
+	}
+	http.Redirect(w, r, url, http.StatusSeeOther)
 	return nil
 }

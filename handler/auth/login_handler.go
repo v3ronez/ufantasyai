@@ -33,6 +33,18 @@ func HandleLoginCreate(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func HandlerLoginWithGoogle(w http.ResponseWriter, r *http.Request) error {
+	resp, err := sb.Client.Auth.SignInWithProvider(supabase.ProviderSignInOptions{
+		Provider:   "google",
+		RedirectTo: "http://localhost:3000/auth/redirect-callback",
+	})
+	if err != nil {
+		return err
+	}
+	http.Redirect(w, r, resp.URL, http.StatusSeeOther)
+	return nil
+}
+
 // sing up
 func HandleSingUpIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.SignUp().Render(r.Context(), w)
