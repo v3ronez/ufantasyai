@@ -59,7 +59,7 @@ func HandleSingUpCreate(w http.ResponseWriter, r *http.Request) error {
 	return handler.RenderComponent(w, r, auth.SignUpSuccess(user.Email))
 }
 
-// redirect email validate
+// redirect confirm email link
 func HandlerAuthRedirect(w http.ResponseWriter, r *http.Request) error {
 	accessToken := r.URL.Query().Get("access_token")
 	if accessToken == "" {
