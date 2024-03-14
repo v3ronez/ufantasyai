@@ -28,10 +28,13 @@ func main() {
 	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS)))) //render static files
 	// router.Handle("/*", http.StripPrefix("/public/", http.FileServerFS(os.DirFS("public")))) //render static files
 	router.Get("/", handler.Make(home.HandlerHomeIndex))
+
 	router.Get("/login", handler.Make(auth.HandleLoginIndex))
 	router.Post("/login", handler.Make(auth.HandleLoginCreate))
+
 	router.Get("/signup", handler.Make(auth.HandleSingUpIndex))
 	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
+	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
 
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)

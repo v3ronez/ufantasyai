@@ -3,6 +3,7 @@ package auth
 import (
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/nedpals/supabase-go"
 	"github.com/v3ronez/ufantasyai/handler"
@@ -26,14 +27,7 @@ func HandleLoginCreate(w http.ResponseWriter, r *http.Request) error {
 			auth.LoginForm(credentials,
 				auth.LoginErrors{InvalidCredentials: "The credentials you have entered are invalid"}))
 	}
-	cookie := &http.Cookie{
-		Name:     "access_token",
-		Value:    res.AccessToken,
-		Secure:   true,
-		Path:     "/",
-		HttpOnly: true,
-	}
-	http.SetCookie(w, cookie)
+	setAuthCokkie(w, &http.Cookie{Name: "access_token", Value: res.AccessToken})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return nil
 }
@@ -63,4 +57,27 @@ func HandleSingUpCreate(w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 	return handler.RenderComponent(w, r, auth.SignUpSuccess(user.Email))
+}
+
+// redirect email validate
+func HandlerAuthRedirect(w http.ResponseWriter, r *http.Request) error {
+	accessToken := r.URL.Query().Get("access_token")
+	if accessToken == "" {
+		return handler.RenderComponent(w, r, auth.RedictCallBackScript())
+	}
+	setAuthCokkie(w, &http.Cookie{Name: "access_token", Value: accessToken})
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	return nil
+}
+
+func setAuthCokkie(w http.ResponseWriter, cokkie *http.Cookie) {
+	cokkie.HttpOnly = true
+	cokkie.Secure = true
+	if cokkie.Expires.IsZero() {
+		cokkie.Expires = time.Now().Add(time.Hour)
+	}
+	if cokkie.Path == "" {
+		cokkie.Path = "/"
+	}
+	http.SetCookie(w, cokkie)
 }
