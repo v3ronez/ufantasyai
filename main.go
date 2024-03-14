@@ -38,7 +38,7 @@ func main() {
 	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
 	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
 
-	//user logged
+	//only user logged
 	router.Group(func(authRoute chi.Router) {
 		authRoute.Use(auth.WithUserAuth)
 		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
