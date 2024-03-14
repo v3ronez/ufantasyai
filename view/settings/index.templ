@@ -1,0 +1,9 @@
+package settings
+import "github.com/v3ronez/ufantasyai/view/layout"
+import "github.com/v3ronez/ufantasyai/types"
+
+
+templ Index(user types.AuthenticateUser) {
+        @layout.App(true)
+        <h2>user: { user.Email}</h2>
+}

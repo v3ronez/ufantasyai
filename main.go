@@ -12,6 +12,7 @@ import (
 	"github.com/v3ronez/ufantasyai/handler"
 	"github.com/v3ronez/ufantasyai/handler/auth"
 	"github.com/v3ronez/ufantasyai/handler/home"
+	"github.com/v3ronez/ufantasyai/handler/settings"
 	"github.com/v3ronez/ufantasyai/pkg/sb"
 )
 
@@ -36,6 +37,12 @@ func main() {
 	router.Get("/signup", handler.Make(auth.HandleSingUpIndex))
 	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
 	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
+
+	//user logged
+	router.Group(func(authRoute chi.Router) {
+		authRoute.Use(auth.WithUserAuth)
+		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
+	})
 
 	port := os.Getenv("HTTP_PORT")
 	slog.Info("Application running in", "port", port)

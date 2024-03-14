@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/v3ronez/ufantasyai/handler"
 	"github.com/v3ronez/ufantasyai/pkg/sb"
 	"github.com/v3ronez/ufantasyai/types"
 )
@@ -40,4 +41,20 @@ func userIsLogged(r *http.Request) (types.AuthenticateUser, error) {
 		Email:    user.Email,
 		LoggedIn: true,
 	}, nil
+}
+
+func WithUserAuth(next http.Handler) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, "/public") {
+			next.ServeHTTP(w, r)
+			return
+		}
+		u := handler.GetAuthenticatedUser(r)
+		if !u.LoggedIn {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		next.ServeHTTP(w, r) //ServeHTTP call a function to forward the w,r
+	}
+	return http.HandlerFunc(fn)
 }
