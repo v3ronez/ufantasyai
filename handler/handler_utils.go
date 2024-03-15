@@ -29,8 +29,8 @@ func RenderComponent(w http.ResponseWriter, r *http.Request, c templ.Component) 
 }
 
 func HtmxRedirect(w http.ResponseWriter, r *http.Request, url string) error {
-	if len(w.Header().Get("HX-Request")) > 0 {
-		w.Header().Set("HX-Redirect", url)
+	if len(r.Header.Get("Hx-Request")) > 0 {
+		w.Header().Set("Hx-Redirect", url)
 		w.WriteHeader(http.StatusSeeOther)
 		return nil
 	}
