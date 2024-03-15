@@ -3,12 +3,18 @@ package auth
 import (
 	"log/slog"
 	"net/http"
-	"time"
+	"os"
 
+	"github.com/gorilla/sessions"
 	"github.com/nedpals/supabase-go"
 	"github.com/v3ronez/ufantasyai/handler"
 	"github.com/v3ronez/ufantasyai/pkg/sb"
 	"github.com/v3ronez/ufantasyai/view/auth"
+)
+
+const (
+	SessionUserKey         = "user"
+	SessionAccessTokenName = "accessToken"
 )
 
 func HandleLoginIndex(w http.ResponseWriter, r *http.Request) error {
@@ -27,7 +33,11 @@ func HandleLoginCreate(w http.ResponseWriter, r *http.Request) error {
 			auth.LoginForm(credentials,
 				auth.LoginErrors{InvalidCredentials: "The credentials you have entered are invalid"}))
 	}
-	setAuthCokkie(w, &http.Cookie{Name: "access_token", Value: res.AccessToken})
+
+	if err := setSession(w, r, res.AccessToken); err != nil {
+		return err
+	}
+	// setAuthCokkie(w, &http.Cookie{Name: "access_token", Value: res.AccessToken})
 	// http.Redirect(w, r, "/", http.StatusSeeOther)
 	handler.HtmxRedirect(w, r, "/")
 	return nil
@@ -78,29 +88,51 @@ func HandlerAuthRedirect(w http.ResponseWriter, r *http.Request) error {
 	if accessToken == "" {
 		return handler.RenderComponent(w, r, auth.RedictCallBackScript())
 	}
-	setAuthCokkie(w, &http.Cookie{Name: "access_token", Value: accessToken})
+	if err := setSession(w, r, accessToken); err != nil {
+		return err
+	}
+	// setAuthCokkie(w, &http.Cookie{Name: "access_token", Value: accessToken})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return nil
 }
 
-func setAuthCokkie(w http.ResponseWriter, cokkie *http.Cookie) {
-	cokkie.HttpOnly = true
-	cokkie.Secure = true
-	if cokkie.Expires.IsZero() {
-		cokkie.Expires = time.Now().Add(time.Hour)
-	}
-	if cokkie.Path == "" {
-		cokkie.Path = "/"
-	}
-	http.SetCookie(w, cokkie)
+// func setAuthCokkie(w http.ResponseWriter, cokkie *http.Cookie) {
+// 	cokkie.HttpOnly = true
+// 	cokkie.Secure = true
+// 	if cokkie.Expires.IsZero() {
+// 		cokkie.Expires = time.Now().Add(time.Hour)
+// 	}
+// 	if cokkie.Path == "" {
+// 		cokkie.Path = "/"
+// 	}
+// 	http.SetCookie(w, cokkie)
+// }
+
+func setSession(w http.ResponseWriter, r *http.Request, token string) error {
+	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
+	session, _ := store.Get(r, SessionUserKey)
+	session.Values[SessionAccessTokenName] = token
+	session.Options.HttpOnly = true
+	session.Options.Secure = true
+	return session.Save(r, w)
+}
+func deleteSession(w http.ResponseWriter, r *http.Request) error {
+	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
+	session, _ := store.Get(r, SessionUserKey)
+	session.Values[SessionAccessTokenName] = ""
+	session.Options.MaxAge = -1
+	return session.Save(r, w)
 }
 
 func HandlerLogout(w http.ResponseWriter, r *http.Request) error {
-	setAuthCokkie(w, &http.Cookie{
-		Name:   "access_token",
-		Value:  "",
-		MaxAge: -1,
-	})
+	// setAuthCokkie(w, &http.Cookie{
+	// 	Name:   "access_token",
+	// 	Value:  "",
+	// 	MaxAge: -1,
+	// })
+	if err := deleteSession(w, r); err != nil {
+		return err
+	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return nil
 }
