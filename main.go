@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
+	"github.com/v3ronez/ufantasyai/db"
 	"github.com/v3ronez/ufantasyai/handler"
 	"github.com/v3ronez/ufantasyai/handler/auth"
 	"github.com/v3ronez/ufantasyai/handler/home"
@@ -53,6 +54,9 @@ func main() {
 
 func initApp() error {
 	if err := godotenv.Load(); err != nil {
+		return err
+	}
+	if err := db.Init(); err != nil {
 		return err
 	}
 	return sb.InitSB()
