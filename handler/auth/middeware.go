@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/v3ronez/ufantasyai/handler"
 	"github.com/v3ronez/ufantasyai/pkg/sb"
@@ -19,11 +20,6 @@ func WithUser(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
-		// u, err := userIsLogged(r)
-		// if err != nil {
-		// 	next.ServeHTTP(w, r)
-		// 	return
-		// }
 		store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
 		session, err := store.Get(r, SessionUserKey)
 		if err != nil {
@@ -42,6 +38,7 @@ func WithUser(next http.Handler) http.Handler {
 			return
 		}
 		user := types.AuthenticateUser{
+			ID:       uuid.MustParse(resp.ID),
 			Email:    resp.Email,
 			LoggedIn: true,
 		}

@@ -28,6 +28,7 @@ require (
 require (
 	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/nedpals/postgrest-go v0.1.3 // indirect
 	github.com/uptrace/bun v1.1.17
