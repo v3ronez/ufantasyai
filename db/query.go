@@ -15,7 +15,7 @@ func CreateNewAccount(account types.Account) error {
 	return nil
 }
 
-func GetAccount(id uuid.UUID) (types.Account, error) {
+func GetAccountUseId(id uuid.UUID) (types.Account, error) {
 	var account types.Account
 	err := Bun.NewSelect().Model(&account).Where("user_id = ?", id).Scan(context.Background())
 	return account, err

@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
+	"github.com/v3ronez/ufantasyai/db"
 	"github.com/v3ronez/ufantasyai/handler"
 	"github.com/v3ronez/ufantasyai/pkg/sb"
 	"github.com/v3ronez/ufantasyai/types"
@@ -42,6 +43,13 @@ func WithUser(next http.Handler) http.Handler {
 			Email:    resp.Email,
 			LoggedIn: true,
 		}
+		acc, err := db.GetAccountUseId(user.ID)
+		if err != nil {
+			ctx := context.WithValue(r.Context(), types.UserContextKey, user)
+			next.ServeHTTP(w, r.WithContext(ctx)) //forward the request with the user in context
+			return
+		}
+		user.Account = acc
 		ctx := context.WithValue(r.Context(), types.UserContextKey, user)
 		next.ServeHTTP(w, r.WithContext(ctx)) //forward the request with the user in context
 	}
