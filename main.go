@@ -29,7 +29,6 @@ func main() {
 	router.Use(auth.WithUser)
 	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS)))) //render static files
 	// router.Handle("/*", http.StripPrefix("/public/", http.FileServerFS(os.DirFS("public")))) //render static files
-	router.Get("/", handler.Make(home.HandlerHomeIndex))
 
 	router.Get("/login", handler.Make(auth.HandleLoginIndex))
 	router.Post("/login", handler.Make(auth.HandleLoginCreate))
@@ -40,10 +39,12 @@ func main() {
 	router.Get("/signup", handler.Make(auth.HandleSingUpIndex))
 	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
 	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
-
+	router.Get("/account/setup", handler.Make(settings.HandleAccountSetup))
+	router.Post("/account/setup", handler.Make(settings.HandlePostAccountSetup))
 	//only user logged
 	router.Group(func(authRoute chi.Router) {
-		authRoute.Use(auth.WithUserAuth)
+		authRoute.Use(auth.WithUserAuth, auth.WithAccountSetup)
+		authRoute.Get("/", handler.Make(home.HandlerHomeIndex))
 		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
 	})
 

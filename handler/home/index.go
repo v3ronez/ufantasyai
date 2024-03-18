@@ -10,7 +10,7 @@ import (
 
 func HandlerHomeIndex(w http.ResponseWriter, r *http.Request) error { //is like a controller in laravel
 	user := handler.GetAuthenticatedUser(r)
-	// acc, err := db.GetAccountUseId(user.ID)
+	// acc, err := db.GetAccountUserByID(user.ID)
 	// if err != nil {
 	// 	return err
 	// }

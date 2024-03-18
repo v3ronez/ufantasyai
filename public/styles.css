@@ -1559,8 +1559,21 @@ html {
   margin: auto;
 }
 
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
 .mb-5 {
   margin-bottom: 1.25rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .flex {
@@ -1571,8 +1584,16 @@ html {
   display: table;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
 .h-screen {
   height: 100vh;
+}
+
+.w-4 {
+  width: 1rem;
 }
 
 .w-full {
@@ -1583,6 +1604,10 @@ html {
   max-width: 28rem;
 }
 
+.max-w-xl {
+  max-width: 36rem;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1591,12 +1616,24 @@ html {
   flex: none;
 }
 
+.grow {
+  flex-grow: 1;
+}
+
 .flex-col {
   flex-direction: column;
 }
 
+.items-center {
+  align-items: center;
+}
+
 .justify-center {
   justify-content: center;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .rounded-xl {
@@ -1642,6 +1679,11 @@ html {
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .py-12 {
@@ -1712,4 +1754,8 @@ html {
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.opacity-70 {
+  opacity: 0.7;
 }

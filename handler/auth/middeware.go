@@ -43,13 +43,13 @@ func WithUser(next http.Handler) http.Handler {
 			Email:    resp.Email,
 			LoggedIn: true,
 		}
-		acc, err := db.GetAccountUseId(user.ID)
-		if err != nil {
-			ctx := context.WithValue(r.Context(), types.UserContextKey, user)
-			next.ServeHTTP(w, r.WithContext(ctx)) //forward the request with the user in context
-			return
-		}
-		user.Account = acc
+		// acc, err := db.GetAccountUserByID(user.ID)
+		// if err != nil {
+		// 	ctx := context.WithValue(r.Context(), types.UserContextKey, user)
+		// 	next.ServeHTTP(w, r.WithContext(ctx)) //forward the request with the user in context
+		// 	return
+		// }
+		// user.Account = acc
 		ctx := context.WithValue(r.Context(), types.UserContextKey, user)
 		next.ServeHTTP(w, r.WithContext(ctx)) //forward the request with the user in context
 	}
@@ -83,6 +83,28 @@ func WithUserAuth(next http.Handler) http.Handler {
 			return
 		}
 		next.ServeHTTP(w, r) //ServeHTTP call a function to forward the w,r
+	}
+	return http.HandlerFunc(fn)
+}
+
+func WithAccountSetup(next http.Handler) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, "/public") {
+			next.ServeHTTP(w, r)
+			return
+		}
+		user := handler.GetAuthenticatedUser(r)
+		acc, _ := db.GetAccountUserByID(user.ID)
+		//user has not setup his account yet
+		//redirect to /account/setup
+		if acc.ID == 0 {
+			http.Redirect(w, r, "/account/setup", http.StatusSeeOther)
+			return
+		}
+		user.Account = acc
+		ctx := context.WithValue(r.Context(), types.UserContextKey, user)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 	return http.HandlerFunc(fn)
 }
