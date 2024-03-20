@@ -46,6 +46,7 @@ func main() {
 		authRoute.Use(auth.WithUserAuth, auth.WithAccountSetup)
 		authRoute.Get("/", handler.Make(home.HandlerHomeIndex))
 		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
+		authRoute.Put("/settings", handler.Make(settings.HandlerSettingsUsernameUpdate))
 	})
 
 	port := os.Getenv("HTTP_PORT")

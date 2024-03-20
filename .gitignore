@@ -3,3 +3,4 @@ bin
 *_templ.go*
 node_modules
 tmp
+*.txt

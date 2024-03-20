@@ -11,9 +11,11 @@ install:
 	@npm install -D daisyui@latest
 
 # css:
-# templ:
-# 	@templ generate --watch --proxy=http://localhost:3000
+templ:
+	@templ generate --watch --proxy=http://localhost:3000
 
+tailwind:
+	@npx tailwind -i view/css/app.css -o public/styles.css --watch
 
 build:
 	npx tailwindcss -i view/css/app.css -o public/styles.css
@@ -34,3 +36,7 @@ migration: ## Migrations against the database
 
 seed:
 	@go run cmd/seed/main.go
+
+
+# hot reload
+# make tailwind > make templ > air
