@@ -39,14 +39,21 @@ func main() {
 	router.Get("/signup", handler.Make(auth.HandleSingUpIndex))
 	router.Post("/signup", handler.Make(auth.HandleSingUpCreate))
 	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
-	router.Get("/account/setup", handler.Make(settings.HandleAccountSetup))
-	router.Post("/account/setup", handler.Make(settings.HandlePostAccountSetup))
+
+	router.Group(func(authSetup chi.Router) {
+		authSetup.Use(auth.WithAccountSetup)
+		authSetup.Get("/account/setup", handler.Make(settings.HandleAccountSetup))
+		authSetup.Post("/account/setup", handler.Make(settings.HandlePostAccountSetup))
+	})
+
 	//only user logged
 	router.Group(func(authRoute chi.Router) {
 		authRoute.Use(auth.WithUserAuth, auth.WithAccountSetup)
 		authRoute.Get("/", handler.Make(home.HandlerHomeIndex))
 		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
 		authRoute.Put("/settings", handler.Make(settings.HandlerSettingsUsernameUpdate))
+
+		authRoute.Get("/generate", handler.Make(handler.HandlerGenerateIndex))
 	})
 
 	port := os.Getenv("HTTP_PORT")
