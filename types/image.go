@@ -11,7 +11,7 @@ type ImageStatus int //enum in golang
 const (
 	ImageStatusFailed ImageStatus = iota
 	ImageStatusPending
-	ImageStatusComplted
+	ImageStatusCompleted
 )
 
 type Image struct {
