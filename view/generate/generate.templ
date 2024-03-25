@@ -1,12 +1,32 @@
 package generate
 
 import "github.com/v3ronez/ufantasyai/view/layout"
+import "github.com/v3ronez/ufantasyai/types"
 
-templ Index() {
+type ViewData struct {
+	Images []types.Image
+}
+
+templ Index(viewData ViewData) {
 	@layout.App(true) {
 		<div class="flex w-full h-[calc(100vh-69px)]">
-			<div class="w-1/4 border-r border-app">Generate form</div>
-			<div class="w-3/4 bg-base-300">iamges</div>
+			<div class="w-[400px] border-r border-app">Generate form</div>
+			<div class="flex-1 bg-base-300">
+				@Gallery(viewData.Images)
+			</div>
 		</div>
 	}
+}
+
+templ Gallery(images []types.Image) {
+	//create gallery
+	<div class="grid grid-cols-4" id="galery">
+		for _, image := range images {
+			@GalleryImage(image)
+		}
+	</div>
+}
+
+templ GalleryImage(image types.Image) {
+	//single image props
 }
