@@ -57,7 +57,6 @@ func Init() error {
 		return err
 	}
 	Bun = bun.NewDB(db, pgdialect.New())
-	fmt.Printf("%+v\n", os.Getenv("APP_DEBUG"))
 	if os.Getenv("APP_DEBUG") == "1" {
 		Bun.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	}

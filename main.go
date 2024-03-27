@@ -48,7 +48,7 @@ func main() {
 
 	//only user logged
 	router.Group(func(authRoute chi.Router) {
-		authRoute.Use(auth.WithUserAuth, auth.WithAccountSetup)
+		// authRoute.Use(auth.WithUserAuth, auth.WithAccountSetup)
 		authRoute.Get("/", handler.Make(home.HandlerHomeIndex))
 		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
 		authRoute.Put("/settings", handler.Make(settings.HandlerSettingsUsernameUpdate))

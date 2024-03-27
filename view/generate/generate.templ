@@ -25,7 +25,7 @@ templ Index(viewData ViewData) {
 templ Form() {
 	<form
 		hx-post="/generate"
-		hx-swap="beforeend"
+		hx-swap="afterbegin"
 		hx-target="#galery"
 	>
 		<div class="flex justify-center p-6">
@@ -58,6 +58,8 @@ templ GalleryImage(image types.Image) {
 			<span class="loading loading-dots loading-lg"></span>
 		</div>
 	} else {
-		<div class="bg-green-500 aspect-[2/3] rounded-xl"></div>
+		<div class="bg-green-500 aspect-[2/3] rounded-xl cursor-pointer">
+			<img class="object-cover rounded-xl" src={ image.ImageLocation } alt=""/>
+		</div>
 	}
 }
