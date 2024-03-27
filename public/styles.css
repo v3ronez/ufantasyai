@@ -1742,8 +1742,8 @@ html {
   display: grid;
 }
 
-.aspect-\[3\/4\] {
-  aspect-ratio: 3/4;
+.aspect-\[2\/3\] {
+  aspect-ratio: 2/3;
 }
 
 .h-4 {
