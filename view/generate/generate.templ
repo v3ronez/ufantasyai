@@ -3,16 +3,27 @@ package generate
 import "github.com/v3ronez/ufantasyai/view/layout"
 import "github.com/v3ronez/ufantasyai/types"
 import "fmt"
+import "strconv"
 
 type ViewData struct {
-	Images []types.Image
+	Images      []types.Image
+	FormData    FormData
+	FormDataErr FormDataErr
+}
+type FormData struct {
+	Prompt string
+	Amount int
+}
+type FormDataErr struct {
+	PromptErr string
+	AmountErr string
 }
 
 templ Index(viewData ViewData) {
 	@layout.App(true) {
 		<div class="flex w-full h-[calc(100vh-69px)]">
 			<div class="w-[400px] border-r border-app">
-				@Form()
+				@Form(viewData.FormData, viewData.FormDataErr)
 			</div>
 			<div class="flex-1 bg-base-300">
 				@Gallery(viewData.Images)
@@ -21,17 +32,55 @@ templ Index(viewData ViewData) {
 	}
 }
 
+var amounts = []string{"1", "2", "4", "8"}
+
 //generate a new image and append before the last child of hx-target
-templ Form() {
+templ Form(formData FormData, formErr FormDataErr) {
 	<form
 		hx-post="/generate"
-		hx-swap="afterbegin"
-		hx-target="#galery"
+		hx-swap="outerHTML"
 	>
-		<div class="flex justify-center p-6">
+		<div>
+			<label class="form-control p-4">
+				<div class="label">
+					<span class="label-text">Enter your prompt</span>
+				</div>
+				<textarea class="textarea textarea-bordered h-24" name="prompt" placeholder="Ex:A women with white adress">{ formData.Prompt }</textarea>
+				if len(formErr.PromptErr) > 0 {
+					<div class="label">
+						<span class="text text-error">{ formErr.PromptErr }</span>
+					</div>
+				}
+			</label>
+		</div>
+		<div class="form-control p-4">
+			@JoinRadio(amounts, formData, formErr)
+		</div>
+		<div class="flex justify-center p-4">
 			<button type="submit" class="btn btn-primary w-full">Generate</button>
 		</div>
 	</form>
+}
+
+templ JoinRadio(amounts []string, formData FormData, formErr FormDataErr) {
+	<label class="form-control my-2">
+		<div class="label">
+			<span class="label-text">How many images?</span>
+		</div>
+	</label>
+	<div class="join">
+		for _, amount := range amounts {
+			if  amount == strconv.Itoa(formData.Amount) {
+				<input class="join-item btn" value={ amount } checked type="radio" name="amount" aria-label={ amount }/>
+			}
+			<input class="join-item btn" value={ amount } type="radio" name="amount" aria-label={ amount }/>
+		}
+	</div>
+	if len(formErr.AmountErr) > 0 {
+		<div class="label">
+			<span class="text text-error">{ formErr.AmountErr }</span>
+		</div>
+	}
 }
 
 templ Gallery(images []types.Image) {
