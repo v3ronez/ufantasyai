@@ -41,7 +41,7 @@ func main() {
 	router.Get("/auth/redirect-callback", handler.Make(auth.HandlerAuthRedirect)) //redirect after verify email
 
 	//replicate
-	router.Post("/replicate/callback/{userID}/{batchID  }", handler.Make(handler.HandleReplicateCallback))
+	router.Post("/replicate/callback/{userID}/{batchID}", handler.Make(handler.HandleReplicateCallback))
 
 	router.Group(func(authSetup chi.Router) {
 		authSetup.Use(auth.WithAccountSetup)

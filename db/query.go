@@ -31,9 +31,25 @@ func GetImageForID(imageID int) (types.Image, error) {
 	return image, err
 }
 
+func GetImagesForBatchID(batchID uuid.UUID) ([]types.Image, error) {
+	var images []types.Image
+	err := Bun.NewSelect().
+		Model(&images).
+		Where("batch_id = ?", batchID).
+		Scan(context.Background())
+	return images, err
+}
+
 func CreateImage(image *types.Image) error {
 	_, err := Bun.NewInsert().
 		Model(image).
+		Exec(context.Background())
+	return err
+}
+func UpdateImage(image *types.Image) error {
+	_, err := Bun.NewUpdate().
+		Model(image).
+		WherePK().
 		Exec(context.Background())
 	return err
 }
