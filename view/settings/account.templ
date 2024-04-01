@@ -2,6 +2,7 @@ package settings
 
 import "github.com/v3ronez/ufantasyai/view/layout"
 import "github.com/v3ronez/ufantasyai/types"
+import "github.com/v3ronez/ufantasyai/view"
 
 type ProfileParams struct {
 	Username string
@@ -14,10 +15,14 @@ type ProfileErros struct {
 
 templ Index(user types.AuthenticateUser) {
 	@layout.App(true)
-	<div class="max-w-xl w-full mx-auto mt-4">
+	<div class="max-w-xl w-full mx-auto mt-16">
 		<div>
 			<h1 class="text-lg font-semibold border-b border-gray-gray-700 pb-2">Profile</h1>
 			@ProfileForm(ProfileParams{Username: user.Account.UserName}, ProfileErros{})
+		</div>
+		<div>
+			<h1 class="text-lg font-semibold border-b border-gray-gray-700 pb-2">Credits</h1>
+			@Credits(user)
 		</div>
 		<div class="mt-10">
 			<h1 class="text-lg font-semibold border-b border-gray-gray-700 pb-2">Change password</h1>
@@ -67,4 +72,12 @@ templ ProfileForm(params ProfileParams, erros ProfileErros) {
 			</dd>
 		</div>
 	</form>
+}
+
+templ Credits(user types.AuthenticateUser) {
+	<div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 items-center mt-8">
+		<dt>Credits</dt>
+		<dd class="sm:col-span-1">{ view.String(user.Account.Credits) }</dd>
+		<dd class="sm:col-span-1"><button class="btn btn-neutral"><i class="fa-regular fa-money-bill-1"></i> Buy more.</button></dd>
+	</div>
 }

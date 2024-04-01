@@ -1,0 +1,21 @@
+package components
+
+import "github.com/v3ronez/ufantasyai/view"
+
+templ Modal(userCredits, creditsNeeded int) {
+	<dialog id="creditsModal" class="modal modal-bottom sm:modal-middle">
+		<div class="modal-box">
+			<h3 class="font-bold text-lg">Buy more credits</h3>
+			<p class="py-4">Buy more credits to keep using this feature</p>
+			<p class="py-4">You have { view.String(userCredits) } and you need { view.String(creditsNeeded) }</p>
+			<div class="modal-action">
+				<form method="dialog">
+					<button class="btn">Close</button>
+				</form>
+			</div>
+		</div>
+	</dialog>
+	<script>
+        document.getElementById("creditsModal").showModal()
+    </script>
+}

@@ -26,6 +26,8 @@ func HandlerGenerateIndex(w http.ResponseWriter, r *http.Request) error {
 	return RenderComponent(w, r, generate.Index(viewData))
 }
 
+const creditsPerImage int = 2
+
 func HandlerGenerateImageCreate(w http.ResponseWriter, r *http.Request) error {
 	user := GetAuthenticatedUser(r)
 	prompt := r.FormValue("prompt")
@@ -46,6 +48,17 @@ func HandlerGenerateImageCreate(w http.ResponseWriter, r *http.Request) error {
 		formErr.AmountErr = "Select the amount"
 		return RenderComponent(w, r, generate.Form(formData, formErr))
 	}
+
+	//check if user has credits
+
+	creditsNeeded := qtdImage * creditsPerImage
+	if user.Account.Credits < creditsNeeded {
+		formErr.CreditsNeeded = creditsNeeded
+		formErr.UserCredits = user.Account.Credits
+		formErr.HasNoCredits = true
+		return RenderComponent(w, r, generate.Form(formData, formErr))
+	}
+
 	batchID := uuid.New()
 	generateImageParams := GenerateImageParams{
 		Prompt:  prompt,

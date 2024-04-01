@@ -4,6 +4,7 @@ import "github.com/v3ronez/ufantasyai/view/layout"
 import "github.com/v3ronez/ufantasyai/types"
 import "fmt"
 import "strconv"
+import "github.com/v3ronez/ufantasyai/view/components"
 
 type ViewData struct {
 	Images      []types.Image
@@ -15,8 +16,11 @@ type FormData struct {
 	Amount int
 }
 type FormDataErr struct {
-	PromptErr string
-	AmountErr string
+	PromptErr     string
+	AmountErr     string
+	CreditsNeeded int
+	UserCredits   int
+	HasNoCredits  bool
 }
 
 templ Index(viewData ViewData) {
@@ -31,8 +35,6 @@ templ Index(viewData ViewData) {
 		</div>
 	}
 }
-
-var amounts = []string{"1", "2", "4", "8"}
 
 //generate a new image and append before the last child of hx-target
 templ Form(formData FormData, formErr FormDataErr) {
@@ -60,6 +62,9 @@ templ Form(formData FormData, formErr FormDataErr) {
 			<button type="submit" class="btn btn-primary w-full">Generate</button>
 		</div>
 	</form>
+	if formErr.HasNoCredits {
+		@components.Modal(formErr.UserCredits, formErr.CreditsNeeded)
+	}
 }
 
 templ JoinRadio(amounts []string, formData FormData, formErr FormDataErr) {
@@ -112,3 +117,5 @@ templ GalleryImage(image types.Image) {
 		</div>
 	}
 }
+
+var amounts = []string{"1", "2", "4", "8"}
