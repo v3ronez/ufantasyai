@@ -45,7 +45,7 @@ templ Form(formData FormData, formErr FormDataErr) {
 				<div class="label">
 					<span class="label-text">Enter your prompt</span>
 				</div>
-				<textarea class="textarea textarea-bordered h-24" name="prompt" placeholder="Ex:A women with white adress">{ formData.Prompt }</textarea>
+				<textarea class="textarea textarea-bordered h-24" name="prompt" placeholder="Ex: a women in white dress">{ formData.Prompt }</textarea>
 				if len(formErr.PromptErr) > 0 {
 					<div class="label">
 						<span class="text text-error">{ formErr.PromptErr }</span>
