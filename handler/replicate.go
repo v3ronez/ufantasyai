@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	succeded = "succeeded"
-	// processing = "processing"
+	succeded   = "succeeded"
+	processing = "processing"
 )
 
 type ReplicateResponse struct {
@@ -37,6 +37,9 @@ func HandleReplicateCallback(w http.ResponseWriter, r *http.Request) error {
 	var replicateResponse ReplicateResponse
 	if err := json.NewDecoder(r.Body).Decode(&replicateResponse); err != nil {
 		return err
+	}
+	if replicateResponse.Status == processing {
+		return nil
 	}
 	if replicateResponse.Status != succeded {
 		return fmt.Errorf("status if not succeeded: %s ", err)
