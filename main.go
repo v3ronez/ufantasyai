@@ -59,6 +59,8 @@ func main() {
 		authRoute.Get("/generate", handler.Make(handler.HandlerGenerateIndex))
 		authRoute.Post("/generate", handler.Make(handler.HandlerGenerateImageCreate))
 		authRoute.Get("/generate/image/{id}/status", handler.Make(handler.HandlerGenerateImageStatus))
+		authRoute.Get("/buy-credits", handler.Make(handler.HandleCreditsIndex))
+
 	})
 
 	port := os.Getenv("HTTP_PORT")
