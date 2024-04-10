@@ -48,7 +48,7 @@ func CreateImage(tx bun.Tx, image *types.Image) error {
 	return err
 }
 func UpdateImage(tx bun.Tx, image *types.Image) error {
-	_, err := Bun.NewUpdate().
+	_, err := tx.NewUpdate().
 		Model(image).
 		WherePK().
 		Exec(context.Background())
