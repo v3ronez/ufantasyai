@@ -49,12 +49,13 @@ func HandleReplicateCallback(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return fmt.Errorf("images not founds error: %s ", err)
 	}
+
 	err = db.Bun.RunInTx(r.Context(), &sql.TxOptions{}, func(ctx context.Context, tx bun.Tx) error {
 		for idx, imageURL := range replicateResponse.Output {
 			images[idx].Prompt = replicateResponse.Input.Prompt
 			images[idx].Status = types.ImageStatusCompleted
 			images[idx].ImageLocation = imageURL
-			if err := db.UpdateImage(&images[idx]); err != nil {
+			if err := db.UpdateImage(tx, &images[idx]); err != nil {
 				return err
 			}
 		}

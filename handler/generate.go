@@ -80,7 +80,7 @@ func HandlerGenerateImageCreate(w http.ResponseWriter, r *http.Request) error {
 				Status:        types.ImageStatusPending,
 				ImageLocation: "https://img.freepik.com/premium-photo/cute-girl-with-pretty-face-creative-ai_634423-2810.jpg",
 			}
-			if err := db.CreateImage(&image); err != nil {
+			if err := db.CreateImage(tx, &image); err != nil {
 				return err
 			}
 		}

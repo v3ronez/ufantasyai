@@ -53,7 +53,6 @@ func HandleStripeCheckoutSuccess(w http.ResponseWriter, r *http.Request) error {
 	iter.Next()
 	item := iter.LineItem()
 	priceID := item.Price.ID
-
 	switch priceID {
 	case os.Getenv("100_CREDITS"):
 		user.Account.Credits += 100

@@ -55,7 +55,6 @@ func main() {
 		authRoute.Get("/", handler.Make(home.HandlerHomeIndex))
 		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
 		authRoute.Put("/settings", handler.Make(settings.HandlerSettingsUsernameUpdate))
-
 		authRoute.Get("/generate", handler.Make(handler.HandlerGenerateIndex))
 		authRoute.Post("/generate", handler.Make(handler.HandlerGenerateImageCreate))
 		authRoute.Get("/generate/image/{id}/status", handler.Make(handler.HandlerGenerateImageStatus))
