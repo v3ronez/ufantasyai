@@ -78,6 +78,6 @@ templ Credits(user types.AuthenticateUser) {
 	<div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 items-center mt-8">
 		<dt>Credits</dt>
 		<dd class="sm:col-span-1">{ view.String(user.Account.Credits) }</dd>
-		<dd class="sm:col-span-1"><button class="btn btn-neutral"><i class="fa-regular fa-money-bill-1"></i> Buy more.</button></dd>
+		<dd class="sm:col-span-1"><button class="btn btn-neutral"><a href="/buy-credits"><i class="fa-regular fa-money-bill-1"></i> Buy more.</a></button></dd>
 	</div>
 }

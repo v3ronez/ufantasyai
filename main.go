@@ -51,7 +51,7 @@ func main() {
 
 	//only user logged
 	router.Group(func(authRoute chi.Router) {
-		// authRoute.Use(auth.WithUserAuth, auth.WithAccountSetup)
+		authRoute.Use(auth.WithUserAuth, auth.WithAccountSetup)
 		authRoute.Get("/", handler.Make(home.HandlerHomeIndex))
 		authRoute.Get("/settings", handler.Make(settings.HandlerSettingsIndex))
 		authRoute.Put("/settings", handler.Make(settings.HandlerSettingsUsernameUpdate))
@@ -60,6 +60,9 @@ func main() {
 		authRoute.Post("/generate", handler.Make(handler.HandlerGenerateImageCreate))
 		authRoute.Get("/generate/image/{id}/status", handler.Make(handler.HandlerGenerateImageStatus))
 		authRoute.Get("/buy-credits", handler.Make(handler.HandleCreditsIndex))
+		authRoute.Get("/checkout/create/{productID}", handler.Make(handler.HandleStripeCheckout))
+		authRoute.Get("/checkout/success/{sessionID}", handler.Make(handler.HandleStripeCheckoutSuccess))
+		authRoute.Get("/checkout/cancel", handler.Make(handler.HandleStripeCheckoutCancel))
 
 	})
 

@@ -1,6 +1,8 @@
 package credits
 
 import "github.com/v3ronez/ufantasyai/view/layout"
+import "fmt"
+import "os"
 
 type Item struct {
 	Credits  string
@@ -8,39 +10,38 @@ type Item struct {
 	StripeId string
 }
 
-var prices = []Item{
-	{
-		Credits:  "100",
-		Price:    "9,99",
-		StripeId: "123",
-	},
-	{
-		Credits:  "150",
-		Price:    "15,99",
-		StripeId: "1234",
-	},
-	{
-		Credits:  "200",
-		Price:    "20,99",
-		StripeId: "12345",
-	},
-}
-
+// var prices = []Item{
+// 	{
+// 		Credits:  "100",
+// 		Price:    "9,99",
+// 		StripeId: "123",
+// 	},
+// 	{
+// 		Credits:  "150",
+// 		Price:    "15,99",
+// 		StripeId: "1234",
+// 	},
+// 	{
+// 		Credits:  "200",
+// 		Price:    "20,99",
+// 		StripeId: "12345",
+// 	},
+// }
 templ Index() {
 	@layout.App(true) {
 		<div class="w-full max-w-4xl bg-base-300 rounded-xl mt-12 p-24 mx-auto">
 			<h2 class="text-lg text-center mb-8">Buy more credits</h2>
 			<div class="flex justify-around">
-				for _,item := range prices {
-					@PriceCard(item)
-				}
+				@PriceCard(Item{"100", "9,99", os.Getenv("100_CREDITS")})
+				@PriceCard(Item{"500", "49,99", os.Getenv("500_CREDITS")})
+				@PriceCard(Item{"1000", "89,90", os.Getenv("1000_CREDITS")})
 			</div>
 		</div>
 	}
 }
 
 templ PriceCard(i Item) {
-	<div class="border border-gray-700 hover:border-gray-500 px-10 py-4 rounded-lg text-center cursor-pointer">
+	<div hx-get={ fmt.Sprintf("/checkout/create/%s", i.StripeId) } class="border border-gray-700 hover:border-gray-500 px-10 py-4 rounded-lg text-center cursor-pointer">
 		<div class="mb-8 text-2xl font-black text-secondary">{  i.Credits } credits</div>
 		<div class="text-xl">R$ { i.Price }</div>
 	</div>
