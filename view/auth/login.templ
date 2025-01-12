@@ -1,8 +1,10 @@
 package auth
 
-import "github.com/v3ronez/ufantasyai/view/layout"
-import "os"
-import "github.com/nedpals/supabase-go"
+import (
+	"github.com/nedpals/supabase-go"
+	"github.com/v3ronez/ufantasyai/view/layout"
+	"os"
+)
 
 type LoginErrors struct {
 	Email              string
@@ -22,16 +24,19 @@ templ Login() {
 }
 
 templ LoginForm(creds supabase.UserCredentials, err LoginErrors) {
-	<form
-		hx-post="/login"
-		hx-swap="outerHTML"
-	>
+	<form hx-post="/login" hx-swap="outerHTML">
 		<div class="w-full mb-5">
 			<label class="form-control w-full">
 				<div class="label">
 					<span class="label-text">Email</span>
 				</div>
-				<input type="text" name="email" value={ creds.Email } placeholder="Email" class="input input-bordered w-full"/>
+				<input
+					type="text"
+					name="email"
+					value={ creds.Email }
+					placeholder="Email"
+					class="input input-bordered w-full"
+				/>
 				if len(err.Email) > 0 {
 					<div class="label">
 						<span class="label-text-alt text-error">{ err.Email }</span>
@@ -44,7 +49,12 @@ templ LoginForm(creds supabase.UserCredentials, err LoginErrors) {
 				<div class="label">
 					<span class="label-text">Password</span>
 				</div>
-				<input type="password" name="password" placeholder="Password" class="input input-bordered w-full"/>
+				<input
+					type="password"
+					name="password"
+					placeholder="Password"
+					class="input input-bordered w-full"
+				/>
 				if len(err.Password) > 0 {
 					<div class="label">
 						<span class="label-text-alt text-error">{ err.Password }</span>
@@ -86,16 +96,19 @@ templ SignUp() {
 }
 
 templ SignUpForm(creds supabase.UserCredentials, err SignUpErrors) {
-	<form
-		hx-post="/signup"
-		hx-swap="outerHTML"
-	>
+	<form hx-post="/signup" hx-swap="outerHTML">
 		<div class="w-full mb-5">
 			<label class="form-control w-full">
 				<div class="label">
 					<span class="label-text">Email</span>
 				</div>
-				<input type="text" name="email" value={ creds.Email } placeholder="Email" class="input input-bordered w-full"/>
+				<input
+					type="text"
+					name="email"
+					value={ creds.Email }
+					placeholder="Email"
+					class="input input-bordered w-full"
+				/>
 				if len(err.Email) > 0 {
 					<div class="label">
 						<span class="label-text-alt text-error">{ err.Email }</span>
@@ -108,7 +121,12 @@ templ SignUpForm(creds supabase.UserCredentials, err SignUpErrors) {
 				<div class="label">
 					<span class="label-text">Password</span>
 				</div>
-				<input type="password" name="password" placeholder="Password" class="input input-bordered w-full"/>
+				<input
+					type="password"
+					name="password"
+					placeholder="Password"
+					class="input input-bordered w-full"
+				/>
 				if len(err.Password) > 0 {
 					<div class="label">
 						<span class="label-text-alt text-error">{ err.Password }</span>
@@ -121,7 +139,12 @@ templ SignUpForm(creds supabase.UserCredentials, err SignUpErrors) {
 				<div class="label">
 					<span class="label-text">Repeat Password</span>
 				</div>
-				<input type="password" name="confirm_password" placeholder="Password" class="input input-bordered w-full"/>
+				<input
+					type="password"
+					name="confirm_password"
+					placeholder="Password"
+					class="input input-bordered w-full"
+				/>
 				if len(err.Password) > 0 {
 					<div class="label">
 						<span class="label-text-alt text-error">{ err.ConfirmPassword }</span>
@@ -132,7 +155,9 @@ templ SignUpForm(creds supabase.UserCredentials, err SignUpErrors) {
 		if len(err.InvalidCredentials) > 0 {
 			<div class="text-sm text-center text-error mb-5">{ err.InvalidCredentials }</div>
 		}
-		<button type="submit" class="btn btn-primary w-full">Create account <i class="fa-solid fa-arrow-right"></i></button>
+		<button type="submit" class="btn btn-primary w-full">
+			Create account <i class="fa-solid fa-arrow-right"></i>
+		</button>
 	</form>
 }
 
@@ -142,10 +167,10 @@ templ SignUpSuccess(email string) {
 
 templ RedictCallBackScript() {
 	<script>
-		var url = window.location.href
-		var newUrl = url.replace("#", "?")
-		window.location = newUrl
-	</script>
+	var url = window.location.href
+	var newUrl = url.replace("#", "?")
+	window.location = newUrl
+</script>
 }
 
 type AccountSetupFormParams struct {
@@ -162,7 +187,16 @@ templ AccountSetupForm(params AccountSetupFormParams, errs AccountSetupErrors) {
 			<div class="label">
 				<span class="label-text">Username</span>
 			</div>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"></path></svg>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 16 16"
+				fill="currentColor"
+				class="w-4 h-4 opacity-70"
+			>
+				<path
+					d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"
+				></path>
+			</svg>
 			<input type="text" name="username" value={ params.Username } class="grow"/>
 			if len(errs.Username) > 0 {
 				<div class="label">
